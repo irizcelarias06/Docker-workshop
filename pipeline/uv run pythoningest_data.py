@@ -1,0 +1,13 @@
+uv run python ingest_data.py \
+  --pg-user=root \
+  --pg-pass=root \
+  --pg-host=localhost \
+  --pg-port=5432 \
+  --pg-db=ny_taxi \
+  --target-table=yellow_taxi_trips_2021_1 \
+  --year=2021 \
+  --month=1 \
+  --chunksize=100000
+
+#I executed this:
+uv run python ingest_data.py --year 2021 --month 2 --table-name yellow_taxi_data_feb
