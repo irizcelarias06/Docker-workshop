@@ -1,13 +1,56 @@
+docker run -it --rm \
+  -e POSTGRES_USER="root" \
+  -e POSTGRES_PASSWORD="root" \
+  -e POSTGRES_DB="ny_taxi" \
+  -v ny_taxi_postgres_data:/var/lib/postgresql \
+  -p 5432:5432 \
+  --network=pg-network  \
+  --name pgdatabase  \
+  postgres:18
+
+
+
+docker run -it \    
+  -e PGADMIN_DEFAULT_EMAIL="admin@admin.com" \
+  -e PGADMIN_DEFAULT_PASSWORD="root" \
+  -v pgadmin_data:/var/lib/pgadmin \
+  -p 8085:80 \
+  --network=pg-network  \
+  --name pgdatabase  \
+  dpage/pgadmin4
+
+
+
+# i think this is the container where you'll execute your ingestion
+docker run -it --rm    \
+  --network=pipeline_default  \
+    taxi_ingest:v003   \
+      --pg-user=root   \
+      --pg-pass=root   \
+      --pg-host=pgdatabase    \
+      --pg-port=5432    \
+      --pg-db=ny_taxi    \
+      --target-table=yellow_taxi_trips_2021_1   \
+      --chunksize=100000
+
+
+
+
+
+
+
 uv run python ingest_data.py \
-  --pg-user=root \
+  --pg-user=root \ 
   --pg-pass=root \
-  --pg-host=localhost \
-  --pg-port=5432 \
+  --pg-host=localhost \ 
+  --pg-port=5432 \ 
   --pg-db=ny_taxi \
-  --target-table=yellow_taxi_trips_2021_1 \
-  --year=2021 \
-  --month=1 \
+  --target-table=yellow_taxi_trips_2021_1 \ 
   --chunksize=100000
 
-#I executed this:
-uv run python ingest_data.py --year 2021 --month 2 --table-name yellow_taxi_data_feb
+
+
+
+
+
+
