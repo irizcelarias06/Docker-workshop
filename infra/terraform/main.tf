@@ -8,15 +8,13 @@ terraform {
 }
 
 provider "google" {
-  project = "taxi-rides-ny-502502"
-  region  = "us-central1"
+  project = var.project
+  region  = var.region
 }
 
-
-
 resource "google_bigquery_dataset" "ny_taxi_dataset" {
-  dataset_id = "ny_taxi_tf"
-  location   = "US"
+  dataset_id = var.bq_dataset_name
+  location   = var.location
 
   description = "NYC taxi practice dataset managed by Terraform"
 
