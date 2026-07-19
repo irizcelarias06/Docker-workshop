@@ -20,11 +20,11 @@ resource "google_bigquery_dataset" "ny_taxi_dataset" {
 
   description = "NYC taxi practice dataset managed by Terraform"
 
-  # 3 days expressed in milliseconds:
-  # 3 × 24 × 60 × 60 × 1000 = 259200000
+  # Non-partitioned tables expire after 3 days.
   default_table_expiration_ms = 259200000
 
-  # Allows `terraform destroy` to remove the dataset
-  # even when it already contains tables.
+  # Partitions in newly created partitioned tables expire after 3 days.
+  default_partition_expiration_ms = 259200000
+
   delete_contents_on_destroy = true
 }
